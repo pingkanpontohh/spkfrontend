@@ -30,7 +30,7 @@ function AdminJurusan(){
       const response =
       await axios.get(
 
-        "http://localhost:5000/api/jurusan"
+        "https://spkbackend-gamma.vercel.app/"
 
       );
 

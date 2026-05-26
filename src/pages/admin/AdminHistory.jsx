@@ -30,7 +30,7 @@ function HistoryHasil(){
       const response =
       await axios.get(
 
-        "http://localhost:5000/api/topsis/history"
+        "https://spkbackend-gamma.vercel.app/"
 
       );
 

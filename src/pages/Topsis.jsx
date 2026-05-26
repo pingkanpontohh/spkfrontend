@@ -125,7 +125,7 @@ const handleSubmit = async () => {
     const response =
     await axios.post(
 
-      "http://localhost:5000/api/topsis/save",
+      "https://spkbackend-gamma.vercel.app/",
 
       {
 
@@ -155,7 +155,7 @@ const handleSubmit = async () => {
    const hasilTopsis =
       await axios.post(
 
-        "http://localhost:5000/api/topsis/proses",
+        "https://spkbackend-gamma.vercel.app/",
 
         {
 
