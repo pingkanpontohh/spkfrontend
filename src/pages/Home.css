@@ -1,0 +1,522 @@
+/* src/pages/Home.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+html{
+    scroll-behavior:smooth;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins', sans-serif;
+}
+
+body{
+    overflow-x:hidden;
+    background:#f5f5f5;
+}
+
+.home{
+    width:100%;
+}
+
+/* NAVBAR */
+
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+
+    width:100%;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:20px 8%;
+
+    z-index:9999;
+
+    background:rgba(20,20,20,0.7);
+    backdrop-filter:blur(8px);
+}
+
+.logo h1{
+    color:white;
+    font-size:50px;
+    font-weight:700;
+}
+
+.logo p{
+    color:#ddd;
+}
+
+.navbar ul{
+    display:flex;
+    align-items:center;
+    gap:40px;
+
+    list-style:none;
+}
+
+.navbar ul li a{
+    text-decoration:none;
+    color:white;
+    font-weight:500;
+    transition:0.3s;
+}
+
+.navbar ul li a:hover{
+    color:#f3d4cf;
+}
+
+.navbar button{
+    padding:12px 24px;
+
+    border:none;
+    border-radius:30px;
+
+    background:linear-gradient(
+        to right,
+        #7b112c,
+        #d9b8b2
+    );
+
+    color:white;
+
+    cursor:pointer;
+}
+
+/* HERO */
+
+.hero{
+    width:100%;
+    height:100vh;
+
+    background-image:url("/banner.jpeg");
+    background-size:cover;
+    background-position:center;
+
+    position:relative;
+}
+
+.overlay{
+    width:100%;
+    height:100%;
+
+    background:rgba(0,0,0,0.55);
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+
+    padding:20px;
+
+    color:white;
+
+    position:relative;
+    z-index:1;
+}
+
+.overlay h1{
+    font-size:90px;
+    line-height:1.1;
+    margin-bottom:20px;
+}
+
+.overlay p{
+    width:800px;
+    max-width:100%;
+
+    font-size:20px;
+    line-height:1.8;
+}
+
+.overlay button{
+    margin-top:40px;
+
+    padding:18px 45px;
+
+    border:none;
+    border-radius:40px;
+
+    background:linear-gradient(
+        to right,
+        #7b112c,
+        #d9b8b2
+    );
+
+    color:white;
+
+    font-size:18px;
+    font-weight:600;
+
+    cursor:pointer;
+}
+
+/* STATS */
+
+.stats{
+    width:100%;
+
+    padding:80px 8%;
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(250px,1fr));
+
+    gap:30px;
+}
+
+.card-stat{
+    background:white;
+
+    border-radius:20px;
+
+    padding:40px;
+
+    text-align:center;
+
+    box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+
+.icon{
+    font-size:45px;
+    color:#7b112c;
+    margin-bottom:20px;
+}
+
+.card-stat h2{
+    color:#7b112c;
+    margin-bottom:10px;
+}
+
+/* JURUSAN */
+
+.jurusan-section{
+    width:100%;
+    padding:40px 8% 100px;
+}
+
+.title{
+    text-align:center;
+    margin-bottom:60px;
+}
+
+.title h2{
+    font-size:50px;
+    color:#7b112c;
+    margin-bottom:15px;
+}
+
+.title p{
+    color:#666;
+    font-size:18px;
+}
+
+.jurusan-container{
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(320px,1fr));
+
+    gap:30px;
+}
+
+.jurusan-card{
+    background:white;
+
+    border-radius:25px;
+
+    overflow:hidden;
+
+    box-shadow:0 5px 20px rgba(0,0,0,0.1);
+
+    transition:0.3s;
+}
+
+.jurusan-card:hover{
+    transform:translateY(-10px);
+}
+
+.jurusan-card img{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+}
+
+.jurusan-content{
+    padding:25px;
+}
+
+.badge{
+    display:inline-block;
+
+    padding:8px 20px;
+
+    border-radius:20px;
+
+    background:linear-gradient(
+        to right,
+        #7b112c,
+        #d9b8b2
+    );
+
+    color:white;
+
+    font-size:14px;
+
+    margin-bottom:20px;
+}
+
+.jurusan-content h3{
+    font-size:35px;
+    color:#444;
+    margin-bottom:15px;
+}
+
+.jurusan-content p{
+    line-height:1.8;
+    color:#666;
+    margin-bottom:25px;
+}
+
+.jurusan-content button{
+    width:100%;
+
+    padding:16px;
+
+    border:none;
+    border-radius:18px;
+
+    background:linear-gradient(
+        to right,
+        #7b112c,
+        #d9b8b2
+    );
+
+    color:white;
+
+    font-size:18px;
+    font-weight:600;
+
+    cursor:pointer;
+}
+
+/* TENTANG */
+
+.tentang{
+    width:100%;
+    padding:100px 8%;
+    background:white;
+}
+
+.tentang-container{
+    max-width:900px;
+    margin:auto;
+    text-align:center;
+}
+
+.tentang-container h2{
+    font-size:50px;
+    color:#7b112c;
+    margin-bottom:20px;
+}
+
+.tentang-container p{
+    line-height:2;
+    color:#555;
+    font-size:18px;
+}
+
+/* MODAL */
+
+.modal-overlay{
+    position:fixed;
+    top:0;
+    left:0;
+
+    width:100%;
+    height:100vh;
+
+    background:rgba(0,0,0,0.6);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    z-index:99999;
+
+    padding:20px;
+}
+
+.modal{
+    width:100%;
+    max-width:700px;
+
+    background:white;
+
+    border-radius:25px;
+
+    overflow:hidden;
+}
+
+.modal img{
+    width:100%;
+    height:300px;
+    object-fit:cover;
+}
+
+.modal h2{
+    font-size:40px;
+    color:#7b112c;
+    padding:25px 30px 10px;
+}
+
+.modal h4{
+    padding:10px 30px;
+    color:#7b112c;
+}
+
+.modal p{
+    padding:0 30px 10px;
+    line-height:1.8;
+    color:#555;
+}
+
+.modal-button{
+    display:flex;
+    gap:20px;
+
+    padding:30px;
+}
+
+.modal-button button{
+    flex:1;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:15px;
+
+    font-size:16px;
+    font-weight:600;
+
+    cursor:pointer;
+}
+
+.btn-close{
+    background:#ddd;
+}
+
+.btn-test{
+    background:linear-gradient(
+        to right,
+        #7b112c,
+        #d9b8b2
+    );
+
+    color:white;
+}
+
+/* RESPONSIVE */
+
+@media screen and (max-width:768px){
+
+    .navbar{
+        flex-direction:column;
+        gap:20px;
+    }
+
+    .navbar ul{
+        flex-wrap:wrap;
+        justify-content:center;
+        gap:20px;
+    }
+
+    .logo h1{
+        font-size:35px;
+    }
+
+    .overlay h1{
+        font-size:45px;
+    }
+
+    .overlay p{
+        font-size:16px;
+    }
+
+    .title h2{
+        font-size:38px;
+    }
+
+    .jurusan-content h3{
+        font-size:28px;
+    }
+
+    .modal-button{
+        flex-direction:column;
+    }
+
+}
+
+/* ================= DARK MODE ================= */
+
+.dark{
+    background:#121212;
+    color:white;
+}
+
+.dark .stats{
+    background:#121212;
+}
+
+.dark .card-stat{
+    background:#1e1e1e;
+    color:white;
+}
+
+.dark .jurusan-card{
+    background:#1e1e1e;
+}
+
+.dark .jurusan-content h3{
+    color:white;
+}
+
+.dark .jurusan-content p{
+    color:#ddd;
+}
+
+.dark .title p{
+    color:#ddd;
+}
+
+.dark .tentang{
+    background:#1e1e1e;
+}
+
+.dark .tentang-container p{
+    color:#ddd;
+}
+
+.dark .modal{
+    background:#1e1e1e;
+    color:white;
+}
+
+.dark .modal p{
+    color:#ddd;
+}
+
+.dark .modal h2,
+.dark .modal h4{
+    color:white;
+}

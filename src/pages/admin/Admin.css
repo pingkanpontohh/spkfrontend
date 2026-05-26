@@ -1,0 +1,511 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Poppins,sans-serif;
+}
+
+body{
+    background:#f5f7fb;
+}
+
+/* ================= LAYOUT ================= */
+
+.admin-layout{
+    display:flex;
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar{
+
+    width:260px;
+
+    min-height:100vh;
+
+    background:
+    linear-gradient(
+      180deg,
+      #1d1d35,
+      #111827
+    );
+
+    padding:30px;
+
+    position:fixed;
+
+    left:0;
+    top:0;
+
+    color:white;
+
+}
+
+.sidebar h2{
+
+    margin-bottom:40px;
+
+    font-size:30px;
+
+}
+
+.sidebar ul{
+
+    list-style:none;
+
+}
+
+.sidebar li{
+
+    margin-bottom:20px;
+
+}
+
+.sidebar a{
+
+    text-decoration:none;
+
+    color:white;
+
+    font-size:17px;
+
+    font-weight:500;
+
+    transition:0.3s;
+
+}
+
+.sidebar a:hover{
+
+    color:#f5d0c5;
+
+}
+
+.sidebar button{
+
+    width:100%;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:
+    linear-gradient(
+      90deg,
+      maroon,
+      #f5d0c5
+    );
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    margin-top:20px;
+
+}
+
+/* ================= CONTENT ================= */
+
+.admin-content{
+
+    margin-left:260px;
+
+    width:100%;
+
+    padding:40px;
+
+}
+
+/* ================= TOPBAR ================= */
+
+.topbar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:30px;
+
+}
+
+.topbar h1{
+
+    font-size:38px;
+
+    color:#1e293b;
+
+}
+
+.add-btn{
+
+    padding:14px 24px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:
+    linear-gradient(
+      90deg,
+      maroon,
+      #f5d0c5
+    );
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:0.3s;
+
+}
+
+.add-btn:hover{
+
+    transform:translateY(-2px);
+
+}
+
+/* ================= TABLE ================= */
+
+.table-card{
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:24px;
+
+    box-shadow:
+    0 5px 20px rgba(0,0,0,0.08);
+
+}
+
+.modern-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.modern-table thead{
+
+    background:#f8dede;
+
+}
+
+.modern-table th{
+
+    padding:20px;
+
+    text-align:left;
+
+    color:#333;
+
+    font-size:16px;
+
+}
+
+.modern-table td{
+
+    padding:20px;
+
+    border-bottom:
+    1px solid #eee;
+
+    font-size:15px;
+
+}
+
+.modern-table tr:hover{
+
+    background:#fafafa;
+
+}
+
+/* ================= BUTTONS ================= */
+
+.action-buttons{
+
+    display:flex;
+
+    gap:10px;
+
+}
+
+.edit-btn{
+
+    padding:10px 18px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#2563eb;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+}
+
+.delete-btn{
+
+    padding:10px 18px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#dc2626;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:768px){
+
+    .sidebar{
+
+        width:100%;
+
+        min-height:auto;
+
+        position:relative;
+
+    }
+
+    .admin-content{
+
+        margin-left:0;
+
+        padding:20px;
+
+    }
+
+    .topbar{
+
+        flex-direction:column;
+
+        gap:20px;
+
+        align-items:flex-start;
+
+    }
+
+}
+
+/* ================= DASHBOARD ================= */
+
+.dashboard-cards{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(250px,1fr));
+
+    gap:25px;
+
+    margin-bottom:30px;
+
+}
+
+.dashboard-card{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:24px;
+
+    box-shadow:
+    0 5px 20px rgba(0,0,0,0.08);
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+}
+
+.dashboard-card h3{
+
+    color:#64748b;
+
+    margin-bottom:10px;
+
+}
+
+.dashboard-card p{
+
+    font-size:36px;
+
+    font-weight:bold;
+
+    color:#111827;
+
+}
+
+.card-icon{
+
+    width:70px;
+    height:70px;
+
+    border-radius:20px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    color:white;
+
+}
+
+.users{
+
+    background:#2563eb;
+
+}
+
+.jurusan{
+
+    background:#7c3aed;
+
+}
+
+.hasil{
+
+    background:#dc2626;
+
+}
+
+/* ================= CHART ================= */
+
+.chart-card{
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:24px;
+
+    box-shadow:
+    0 5px 20px rgba(0,0,0,0.08);
+
+    margin-bottom:30px;
+
+}
+
+.chart-card h2{
+
+    margin-bottom:25px;
+
+}
+
+.fake-chart{
+
+    height:250px;
+
+    display:flex;
+
+    align-items:flex-end;
+
+    gap:20px;
+
+}
+
+.bar{
+
+    width:60px;
+
+    border-radius:16px 16px 0 0;
+
+    background:
+    linear-gradient(
+      180deg,
+      maroon,
+      #f5d0c5
+    );
+
+}
+
+.bar1{height:120px;}
+.bar2{height:200px;}
+.bar3{height:150px;}
+.bar4{height:220px;}
+.bar5{height:180px;}
+
+/* ================= ACTIVITY ================= */
+
+.activity-card{
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:24px;
+
+    box-shadow:
+    0 5px 20px rgba(0,0,0,0.08);
+
+}
+
+.activity-card h2{
+
+    margin-bottom:20px;
+
+}
+
+.activity-card ul{
+
+    list-style:none;
+
+}
+
+.activity-card li{
+
+    padding:16px;
+
+    border-bottom:
+    1px solid #eee;
+
+    color:#475569;
+
+}
+
+/* ================= HISTORY ================= */
+
+.table-card{
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:24px;
+
+    box-shadow:
+    0 5px 20px rgba(0,0,0,0.08);
+
+}
