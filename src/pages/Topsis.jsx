@@ -51,41 +51,42 @@ function Topsis() {
   // SUBMIT DATA
   // =========================
   const handleSubmit = async () => {
-    setLoading(true);
-    try {
-      // 1. Simpan data registrasi/biodata user ke backend via root POST
-      const response = await API.post("/", {
-        nama: formData.nama,
-        sekolah: formData.sekolah,
-        nilai_ijazah: formData.nilai_ijazah,
-        jenis_kelamin: formData.jenis_kelamin,
-        minat_utama: formData.minat_utama
-      });
-      console.log("Simpan Biodata Sukses:", response.data);
+  setLoading(true);
+  try {
+    // 1. Kirim data ke route saveUser (/api/topsis/save)
+    const response = await API.post("/api/topsis/save", {
+      nama: formData.nama,
+      sekolah: formData.sekolah,
+      nilai_ijazah: formData.nilai_ijazah,
+      jenis_kelamin: formData.jenis_kelamin,
+      minat_utama: formData.minat_utama
+    });
+    console.log("Simpan User Berhasil:", response.data);
 
-      // 2. Kirim data jawaban kuisioner untuk dihitung dengan rumus TOPSIS
-      const hasilTopsis = await API.post("/", {
-        nama: formData.nama,
-        jawaban: [
-          jawaban.q1, jawaban.q2, jawaban.q3,
-          jawaban.q4, jawaban.q5, jawaban.q6, jawaban.q7
-        ]
-      });
-      console.log("Kalkulasi TOPSIS Sukses:", hasilTopsis.data);
+    // 2. Kirim data ke route prosesTopsis (/api/topsis/proses)
+    const hasilTopsis = await API.post("/api/topsis/proses", {
+      nama: formData.nama,
+      jawaban: [
+        jawaban.q1, jawaban.q2, jawaban.q3,
+        jawaban.q4, jawaban.q5, jawaban.q6, jawaban.q7
+      ]
+    });
+    console.log("Kalkulasi TOPSIS Berhasil:", hasilTopsis.data);
 
-      // 3. Menyimpan hasil kalkulasi ke LocalStorage untuk halaman /hasil
-      localStorage.setItem("biodata", JSON.stringify(formData));
-      localStorage.setItem("jawaban", JSON.stringify(jawaban));
-      localStorage.setItem("hasil_topsis", JSON.stringify(hasilTopsis.data.hasil));
+    // 3. Simpan data hasil kalkulasi array ke dalam LocalStorage
+    localStorage.setItem("biodata", JSON.stringify(formData));
+    localStorage.setItem("jawaban", JSON.stringify(jawaban));
+    localStorage.setItem("hasil_topsis", JSON.stringify(hasilTopsis.data.hasil));
 
-      // Pindah Halaman
-      navigate("/hasil");
-    } catch (error) {
-      console.error("Detail Kendala API:", error);
-      alert("Gagal memproses TOPSIS. Pastikan koneksi backend aktif.");
-    }
-    setLoading(false);
-  };
+    // Navigasi ke halaman output
+    navigate("/hasil");
+
+  } catch (error) {
+    console.error("Detail Error saat Submit:", error);
+    alert("Gagal memproses TOPSIS. Periksa log konsol jaringan Anda.");
+  }
+  setLoading(false);
+};
 
   if (loading) return <Loader />;
 
