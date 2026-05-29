@@ -5,7 +5,7 @@ import Loader from "../components/Loader";
 import "../components/Loader.css";
 
 // MENGGUNAKAN INSTANCE CONFIG API DARI src/api.js
-import API from "../api"; 
+import API from "../services/api";
 
 function Topsis() {
   const navigate = useNavigate();
