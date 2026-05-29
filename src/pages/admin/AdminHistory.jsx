@@ -16,11 +16,13 @@ function HistoryHasil() {
     setLoading(true);
     setErrorMsg("");
     try {
-      // 1. PASTIKAN URL ENDPOINT SUDAH BENAR (Menembak router topsis/history)
+      // 1. Memanggil endpoint backend history TOPSIS
       const response = await axios.get("https://spkbackend-gamma.vercel.app/api/topsis/history");
       
-      // 2. AMBIL ARRAY DENGAN AMAN (Mendukung format objek .data atau array langsung)
-      if (response.data && Array.isArray(response.data.data)) {
+      // 2. PERBAIKAN DI SINI: Sesuaikan pengecekan dengan bungkusan properti '.history' dari backend
+      if (response.data && Array.isArray(response.data.history)) {
+        setHistory(response.data.history); // <-- Mengambil array history
+      } else if (Array.isArray(response.data.data)) {
         setHistory(response.data.data);
       } else if (Array.isArray(response.data)) {
         setHistory(response.data);
@@ -60,15 +62,15 @@ function HistoryHasil() {
                 </tr>
               </thead>
               <tbody>
-                {/* 3. DIBERI PENGAMAN Array.isArray AGAR TIDAK PERNAH LAYAR PUTIH */}
+                {/* PENGAMAN UNTUK MENGHINDARI EROR 'e.map is not a function' */}
                 {Array.isArray(history) && history.length > 0 ? (
                   history.map((item, index) => (
                     <tr key={item.id || index}>
                       <td>{index + 1}</td>
-                      <td style={{ fontWeight: "600" }}>{item.nama || item.nama_user}</td>
-                      <td>{item.jurusan || item.nama_jurusan || "Tidak Diketahui"}</td>
+                      <td style={{ fontWeight: "600" }}>{item.nama}</td>
+                      <td>{item.jurusan || "Tidak Diketahui"}</td>
                       <td style={{ color: "#7b112c", fontWeight: "bold" }}>
-                        {item.skor ? Number(item.skor).toFixed(4) : "0.0000"}
+                        {item.skor}
                       </td>
                       <td>
                         {item.created_at 
