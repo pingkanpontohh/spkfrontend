@@ -51,47 +51,70 @@ function Topsis() {
   // SUBMIT DATA
   // =========================
   const handleSubmit = async () => {
-  setLoading(true);
-  try {
-    // 1. Kirim data ke route saveUser (/api/topsis/save)
-    const response = await API.post("/api/topsis/save", {
-      nama: formData.nama,
-      sekolah: formData.sekolah,
-      nilai_ijazah: formData.nilai_ijazah,
-      jenis_kelamin: formData.jenis_kelamin,
-      minat_utama: formData.minat_utama
-    });
-    console.log("Simpan User Berhasil:", response.data);
+    // Amankan pengecekan input kosong sebelum menembak server
+    if (!formData.nama || !formData.sekolah) {
+      alert("Mohon lengkapi data nama dan asal sekolah Anda lebih dulu.");
+      return;
+    }
 
-    // 2. Kirim data ke route prosesTopsis (/api/topsis/proses)
-    const hasilTopsis = await API.post("/api/topsis/proses", {
-      nama: formData.nama,
-      jawaban: [
-        jawaban.q1, jawaban.q2, jawaban.q3,
-        jawaban.q4, jawaban.q5, jawaban.q6, jawaban.q7
-      ]
-    });
-    console.log("Kalkulasi TOPSIS Berhasil:", hasilTopsis.data);
+    setLoading(true);
+    try {
+      // 1. Kirim data ke route saveUser (/api/topsis/save)
+      const response = await API.post("/api/topsis/save", {
+        nama: formData.nama,
+        sekolah: formData.sekolah,
+        nilai_ijazah: formData.nilai_ijazah,
+        jenis_kelamin: formData.jenis_kelamin,
+        minat_utama: formData.minat_utama
+      });
+      console.log("Simpan User Berhasil:", response.data);
 
-    // 3. Simpan data hasil kalkulasi array ke dalam LocalStorage
-    localStorage.setItem("biodata", JSON.stringify(formData));
-    localStorage.setItem("jawaban", JSON.stringify(jawaban));
-    localStorage.setItem("hasil_topsis", JSON.stringify(hasilTopsis.data.hasil));
+      // 2. Kirim data ke route prosesTopsis (/api/topsis/proses)
+      const hasilTopsis = await API.post("/api/topsis/proses", {
+        nama: formData.nama,
+        jawaban: [
+          jawaban.q1, jawaban.q2, jawaban.q3,
+          jawaban.q4, jawaban.q5, jawaban.q6, jawaban.q7
+        ]
+      });
+      console.log("Kalkulasi TOPSIS Berhasil:", hasilTopsis.data);
 
-    // Navigasi ke halaman output
-    navigate("/hasil");
+      // 3. Simpan data hasil kalkulasi array ke dalam LocalStorage
+      localStorage.setItem("biodata", JSON.stringify(formData));
+      localStorage.setItem("jawaban", JSON.stringify(jawaban));
+      localStorage.setItem("hasil_topsis", JSON.stringify(hasilTopsis.data.hasil));
 
-  } catch (error) {
-    console.error("Detail Error saat Submit:", error);
-    alert("Gagal memproses TOPSIS. Periksa log konsol jaringan Anda.");
-  }
-  setLoading(false);
-};
+      // Navigasi ke halaman output hasil perhitungan
+      navigate("/hasil");
 
-  if (loading) return <Loader />;
+    } catch (error) {
+      console.error("Detail Error saat Submit:", error);
+      alert("Gagal memproses TOPSIS. Periksa kembali log konsol backend atau koneksi TiDB Anda.");
+    } finally {
+      // JAMINAN MUTLAK: Loading ditutup dalam kondisi sukses maupun gagal
+      setLoading(false); 
+    }
+  };
 
   return (
     <div className="topsis-page">
+      {/* ========================================================= */}
+      {/* OVERLAY LOADING MODAL (Menggunakan CSS Terintegrasi)       */}
+      {/* ========================================================= */}
+      {loading && (
+        <div className="loading-overlay">
+          <div className="loading-card">
+            {/* Memanfaatkan Komponen Loader bawaan Anda di dalam kartu */}
+            <Loader /> 
+            <h3>Memproses Data</h3>
+            <p>Sistem sedang menghitung rekomendasi program studi menggunakan metode TOPSIS. Mohon tunggu...</p>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================= */}
+      {/* KONTEN UTAMA FORMULIR KUESIONER                           */}
+      {/* ========================================================= */}
       <div className="topsis-container">
         <h1>Tes Pemilihan Prodi</h1>
         <p className="subtitle">Jawab pertanyaan berikut sesuai minat dan kemampuanmu</p>
@@ -153,9 +176,23 @@ function Topsis() {
           ))}
         </div>
 
-        <div className="button-group">
-          <button className="btn-back" onClick={() => navigate("/")}>← Kembali</button>
-          <button className="btn-topsis" onClick={handleSubmit}>Proses TOPSIS</button>
+        <div className="button-group" style={{ display: "flex", gap: "15px", marginTop: "30px" }}>
+          <button 
+            className="btn-back" 
+            onClick={() => navigate("/")}
+            disabled={loading}
+            style={{ padding: "18px", borderRadius: "18px", border: "1px solid #ddd", background: "#fff", cursor: "pointer", fontSize: "18px", fontWeight: "600" }}
+          >
+            ← Kembali
+          </button>
+          <button 
+            className="btn-topsis" 
+            onClick={handleSubmit}
+            disabled={loading}
+            style={{ flex: 1 }}
+          >
+            {loading ? "Sedang Menghitung..." : "Proses TOPSIS"}
+          </button>
         </div>
       </div>
     </div>

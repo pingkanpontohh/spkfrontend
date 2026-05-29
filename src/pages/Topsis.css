@@ -214,3 +214,70 @@ select:focus{
     }
 
 }
+
+/* ========================================================= */
+/* LOADING OVERLAY DESIGN (TAMBAHKAN DI PALING BAWAH)        */
+/* ========================================================= */
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.loading-card {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    text-align: center;
+    max-width: 350px;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Spinner Elemen Berputar (Menggunakan warna marun tema Anda) */
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #7b112c; /* Menggunakan warna utama CSS Anda */
+    border-radius: 50%;
+    animation: spin-around 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+.loading-card h3 {
+    font-size: 22px;
+    color: #333;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.loading-card p {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+}
+
+/* KEYFRAMES ANIMASI */
+@keyframes spin-around {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
