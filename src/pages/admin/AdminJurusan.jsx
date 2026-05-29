@@ -8,11 +8,15 @@ function AdminJurusan() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  // State untuk form input tambah jurusan baru
+  // State untuk form input tambah/edit jurusan baru
   const [namaJurusanInput, setNamaJurusanInput] = useState("");
   const [kategoriIdInput, setKategoriIdInput] = useState("1");
   const [deskripsiInput, setDeskripsiInput] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // --- BERIKUT STATE BARU UNTUK KEBUTUHAN MODAL EDIT ---
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
 
   useEffect(() => {
     fetchJurusan();
@@ -23,10 +27,8 @@ function AdminJurusan() {
     setLoading(true);
     setErrorMessage("");
     try {
-      // TEMBAK KE JALUR API YANG BENAR: /api/jurusan
       const response = await axios.get("https://spkbackend-gamma.vercel.app/api/jurusan");
       
-      // Ambil array di dalam response.data.data sesuai struktur json backend
       if (response.data && Array.isArray(response.data.data)) {
         setJurusan(response.data.data);
       } else if (Array.isArray(response.data)) {
@@ -42,33 +44,80 @@ function AdminJurusan() {
     }
   };
 
-  // 2. FUNGSI POST SIMPAN DATA BARU
-  const handleAddSubmit = async (e) => {
+  // 2. FUNGSI UNTUK MEMBUKA FORM EDIT DATA
+  const handleEditClick = (item) => {
+    setIsEditMode(true);
+    setSelectedId(item.id); // Mengunci ID jurusan yang dipilih
+    setNamaJurusanInput(item.nama_jurusan);
+    setKategoriIdInput(item.kategori_id ? item.kategori_id.toString() : "1");
+    setDeskripsiInput(item.deskripsi);
+    setIsModalOpen(true);
+  };
+
+  // 3. FUNGSI UTAMA SAAT SUBMIT FORM (MENDUKUNG TAMBAH & EDIT)
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!namaJurusanInput.trim()) {
       alert("Nama jurusan tidak boleh kosong!");
       return;
     }
 
-    try {
-      const dataPayload = {
-        kategori_id: parseInt(kategoriIdInput),
-        nama_jurusan: namaJurusanInput,
-        deskripsi: deskripsiInput || "Deskripsi belum diisi",
-        gambar: "default.png" // Menggunakan default placeholder gambar
-      };
+    const dataPayload = {
+      kategori_id: parseInt(kategoriIdInput),
+      nama_jurusan: namaJurusanInput,
+      deskripsi: deskripsiInput || "Deskripsi belum diisi",
+      gambar: "default.png"
+    };
 
-      await axios.post("https://spkbackend-gamma.vercel.app/api/jurusan", dataPayload);
+    try {
+      if (isEditMode) {
+        // JIKA DALAM MODE EDIT: Kirim req PUT ke endpoint backend yang spesifik membawa ID
+        await axios.put(`https://spkbackend-gamma.vercel.app/api/jurusan/${selectedId}`, dataPayload);
+        alert("Data jurusan berhasil diperbarui!");
+      } else {
+        // JIKA DALAM MODE TAMBAH BARU: Kirim req POST
+        await axios.post("https://spkbackend-gamma.vercel.app/api/jurusan", dataPayload);
+        
+        // Peringatan pengingat pengisian bobot kriteria agar tidak merusak rumus TOPSIS
+        alert("Jurusan baru berhasil ditambahkan! PENTING: Mohon pastikan untuk segera mengisi bobot penilaian kriteria untuk alternatif baru ini di database agar perhitungan TOPSIS tidak mengalami crash.");
+      }
       
-      alert("Jurusan baru berhasil ditambahkan!");
-      setIsModalOpen(false);
-      setNamaJurusanInput("");
-      setDeskripsiInput("");
-      fetchJurusan(); // Segera segarkan isi tabel
+      // Bersihkan dan tutup modal form
+      handleCloseModal();
+      fetchJurusan(); 
     } catch (error) {
       console.error(error);
-      alert("Gagal menambahkan jurusan baru. Periksa koneksi backend.");
+      alert(`Gagal ${isEditMode ? "memperbarui" : "menambahkan"} jurusan. Periksa rute api atau koneksi database backend Anda.`);
     }
+  };
+
+  // 4. FUNGSI UNTUK HAPUS DATA JURUSAN
+  const handleHapusClick = async (id) => {
+    if (!id) {
+      alert("ID Jurusan tidak valid.");
+      return;
+    }
+
+    if (window.confirm("Apakah Anda yakin ingin menghapus jurusan ini? Tindakan ini mungkin memengaruhi data relasi penilaian kriteria.")) {
+      try {
+        await axios.delete(`https://spkbackend-gamma.vercel.app/api/jurusan/${id}`);
+        alert("Jurusan berhasil dihapus dari database!");
+        fetchJurusan();
+      } catch (error) {
+        console.error(error);
+        alert("Gagal menghapus jurusan. Pastikan backend mendukung metode DELETE pada endpoint /api/jurusan/:id");
+      }
+    }
+  };
+
+  // FUNGSI UTILS: Reset form jika modal ditutup
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setIsEditMode(false);
+    setSelectedId(null);
+    setNamaJurusanInput("");
+    setDeskripsiInput("");
+    setKategoriIdInput("1");
   };
 
   return (
@@ -78,12 +127,11 @@ function AdminJurusan() {
       <div className="admin-content">
         <div className="topbar">
           <h1>Kelola Jurusan</h1>
-          <button className="add-btn" onClick={() => setIsModalOpen(true)}>
+          <button className="add-btn" onClick={() => { setIsEditMode(false); setIsModalOpen(true); }}>
             + Tambah Jurusan
           </button>
         </div>
 
-        {/* PENANGANAN JIKA TERJADI ERROR / MEMUAT DATA */}
         {loading && <div style={{ padding: "20px", color: "#666" }}>Memuat data jurusan...</div>}
         {errorMessage && <div style={{ padding: "20px", color: "red" }}>{errorMessage}</div>}
 
@@ -107,8 +155,20 @@ function AdminJurusan() {
                       <td style={{ color: "#555", fontSize: "14px" }}>{item.deskripsi}</td>
                       <td>
                         <div className="action-buttons">
-                          <button className="edit-btn">Edit</button>
-                          <button className="delete-btn">Hapus</button>
+                          {/* SEKARANG TOMBOL EDIT AKAN MENGIRIMKAN SELURUH DATA ITEM TERPILIH */}
+                          <button 
+                            className="edit-btn" 
+                            onClick={() => handleEditClick(item)}
+                          >
+                            Edit
+                          </button>
+                          {/* SEKARANG TOMBOL HAPUS AKAN MENGIRIMKAN ID SPESIFIK JURUSAN */}
+                          <button 
+                            className="delete-btn" 
+                            onClick={() => handleHapusClick(item.id)}
+                          >
+                            Hapus
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -126,12 +186,15 @@ function AdminJurusan() {
         )}
       </div>
 
-      {/* MODAL POPUP FORM UNTUK INPUT DATA BARU */}
+      {/* MODAL POPUP FORM UNTUK INPUT / EDIT DATA */}
       {isModalOpen && (
         <div className="modal-overlay" style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", background: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1000 }}>
           <div className="modal-content" style={{ background: "white", padding: "25px", borderRadius: "12px", width: "100%", maxWidth: "450px" }}>
-            <h3 style={{ marginBottom: "15px", color: "#7b112c" }}>Tambah Jurusan Baru</h3>
-            <form onSubmit={handleAddSubmit}>
+            {/* Judul modal berubah dinamis sesuai aksi yang dipilih */}
+            <h3 style={{ marginBottom: "15px", color: "#7b112c" }}>
+              {isEditMode ? "Ubah Data Jurusan" : "Tambah Jurusan Baru"}
+            </h3>
+            <form onSubmit={handleSubmit}>
               
               <div style={{ marginBottom: "12px" }}>
                 <label style={{ display: "block", marginBottom: "5px", fontWeight: "600" }}>Kategori Kelompok</label>
@@ -153,8 +216,10 @@ function AdminJurusan() {
               </div>
 
               <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end" }}>
-                <button type="button" onClick={() => setIsModalOpen(false)} style={{ padding: "10px 15px", borderRadius: "6px", border: "1px solid #ccc", background: "#f9f9f9", cursor: "pointer" }}>Batal</button>
-                <button type="submit" style={{ padding: "10px 20px", borderRadius: "6px", border: "none", background: "#7b112c", color: "white", fontWeight: "bold", cursor: "pointer" }}>Simpan Data</button>
+                <button type="button" onClick={handleCloseModal} style={{ padding: "10px 15px", borderRadius: "6px", border: "1px solid #ccc", background: "#f9f9f9", cursor: "pointer" }}>Batal</button>
+                <button type="submit" style={{ padding: "10px 20px", borderRadius: "6px", border: "none", background: "#7b112c", color: "white", fontWeight: "bold", cursor: "pointer" }}>
+                  {isEditMode ? "Simpan Perubahan" : "Simpan Data"}
+                </button>
               </div>
 
             </form>
